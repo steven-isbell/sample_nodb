@@ -15,8 +15,8 @@ const {
 
 app.get("/api/get", getData);
 app.post("/api/post", postData);
-app.put("/api/put", putData);
-app.delete("/api/delete", deleteData);
+app.put("/api/put/:id", putData);
+app.delete("/api/delete/:id", deleteData);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);
