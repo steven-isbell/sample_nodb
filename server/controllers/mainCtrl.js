@@ -1,8 +1,22 @@
 const axios = require("axios");
+const baseUrl = "https://coinbin.org/";
 const data = [];
 
 const getData = (req, res, next) => {
-  res.json("1");
+  const { coin = null } = req.params;
+  if (data.length === 0) {
+    if (!coin) {
+      axios.get(`${baseUrl}`).then(response => res.json(response.data));
+    } else {
+      axios.get(`${baseUrl}/${coin}`).then(response => res.json(response.data));
+    }
+  } else {
+    if (!coin) {
+      res.json(data);
+    } else {
+      res.json(data.filter(val => val.ticker === coin));
+    }
+  }
 };
 
 const postData = (req, res, next) => {
