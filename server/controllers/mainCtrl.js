@@ -3,7 +3,7 @@ const baseUrl = "https://coinbin.org/";
 const data = [];
 
 const getData = (req, res, next) => {
-  const { coin = null } = req.params;
+  const { coin = null } = req.query;
   if (data.length === 0) {
     if (!coin) {
       axios.get(`${baseUrl}`).then(response => res.json(response.data));
