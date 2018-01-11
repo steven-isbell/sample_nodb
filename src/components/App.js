@@ -10,26 +10,44 @@ class App extends Component {
     super(props);
 
     this.state = {
-      coins: {},
-      landing: true,
+      crypto: {},
+      home: true,
       tracker: false,
-      coinContainer: false
+      coins: false
     };
   }
 
   componentDidMount() {
     axios.get("/api/get").then(response => {
-      this.setState({ coins: response.data[0] });
+      this.setState({ crypto: Object.values(response.data[0].coins) });
     });
   }
+  handleViewChange(val) {
+    if (this.state[val]) return;
+    switch (val) {
+      case "home":
+        this.setState({ home: true, tracker: false, coins: false });
+        break;
+      case "tracker":
+        this.setState({ home: false, tracker: true, coins: false });
+        break;
+      case "coins":
+        this.setState({ home: false, tracker: false, coins: true });
+        break;
+      default:
+        return;
+    }
+  }
   render() {
-    const { coins, landing, tracker, coinContainer } = this.state;
+    const { crypto, home, tracker, coins } = this.state;
+    const changeView = e =>
+      this.handleViewChange(e.target.innerText.toLowerCase());
     return (
       <div className="App">
-        <Header />
-        {landing && <LandingPage />}
+        <Header viewChange={changeView} />
+        {home && <LandingPage />}
         {tracker && <Tracker />}
-        {coinContainer && <CoinContainer />}
+        {coins && <CoinContainer coins={crypto} />}
       </div>
     );
   }

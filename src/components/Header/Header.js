@@ -1,7 +1,7 @@
 import React from "react";
 import "./Header.css";
 
-const Header = () => (
+const Header = ({ viewChange }) => (
   <header className="flex">
     <div className="logo-container">
       <img
@@ -10,9 +10,15 @@ const Header = () => (
       />
     </div>
     <div className="nav-list flex">
-      <div className="nav-list-item">Home</div>
-      <div className="nav-list-item">Coins</div>
-      <div className="nav-list-item">Tracker</div>
+      <div className="nav-list-item" onClick={viewChange}>
+        Home
+      </div>
+      <div className="nav-list-item" onClick={viewChange}>
+        Coins
+      </div>
+      <div className="nav-list-item" onClick={viewChange}>
+        Tracker
+      </div>
     </div>
   </header>
 );
