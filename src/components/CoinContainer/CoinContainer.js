@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import "./CoinContainer.css";
 
 export default class CoinContainer extends Component {
@@ -9,11 +10,8 @@ export default class CoinContainer extends Component {
       textInput: ""
     };
   }
-  displayMore() {
-    // if ()
-  }
   render() {
-    const { coins } = this.props;
+    const { coins, paginate } = this.props;
     const coinMap = (
       <div className="coin-container">
         {coins.map((coin, idx) => (
@@ -27,7 +25,18 @@ export default class CoinContainer extends Component {
       <div>
         <input type="text" placeholder="Search Available Currencies" />
         {coinMap}
-        <button onClick={this.displayMore}>Show More</button>
+        <button
+          onClick={event => paginate(event.target.innerHTML.toLowerCase())}
+        >
+          Previous
+        </button>
+        <button
+          onClick={event => {
+            paginate(event.target.innerHTML.toLowerCase());
+          }}
+        >
+          Next
+        </button>
       </div>
     );
   }

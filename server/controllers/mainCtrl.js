@@ -1,12 +1,15 @@
 const axios = require("axios");
 const baseUrl = "https://coinbin.org";
-const data = [];
+let data = [];
 let selected = null;
+let currItem = 0;
 
 if (data.length === 0) {
   axios
     .get(`${baseUrl}/coins`)
-    .then(response => data.push(response.data))
+    .then(response => {
+      data = [...Object.values(response.data.coins)];
+    })
     .catch(console.log);
 }
 
@@ -22,7 +25,28 @@ const getData = (req, res, next) => {
         })
         .catch(console.log);
     } else res.json(selected);
-  } else res.json(data);
+  } else res.json(data.slice(0, 10));
+};
+
+const paginateCoins = (req, res, next) => {
+  const { paginate } = req.query;
+  console.log(paginate);
+  if (paginate === "next") {
+    currItem += 10;
+    res.json(data.slice(currItem, currItem + 10));
+  } else {
+    currItem -= 10;
+    res.json(data.slice(currItem, currItem + 10));
+  }
+};
+
+const searchCoins = (req, res, next) => {
+  const { searchTerm } = req.query;
+  if (!searchTerm) res.json(data);
+  else {
+    const filtered = data.filter(coin => coin.name.includes(searchTerm));
+    res.json(filtered);
+  }
 };
 
 const postData = (req, res, next) => {
@@ -41,5 +65,7 @@ module.exports = {
   getData,
   postData,
   putData,
-  deleteData
+  deleteData,
+  paginateCoins,
+  searchCoins
 };

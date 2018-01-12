@@ -26,7 +26,6 @@ header img {
 .nav-list-item {
   margin-right: 20px;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
   transition: 0.5s ease;
 }
 
