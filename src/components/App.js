@@ -19,9 +19,13 @@ class App extends Component {
 
     this.handleViewChange = this.handleViewChange.bind(this);
     this.paginate = this.paginate.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   componentDidMount() {
+    // request our initial data
+    // set data to state
+    // head is tracking the first item in the response
     axios
       .get("/api/get")
       .then(response =>
@@ -29,6 +33,8 @@ class App extends Component {
       )
       .catch(err => alert(err));
   }
+  // mimicking routing
+  // show and hide components based on boolean
   handleViewChange(val) {
     if (this.state[val]) return;
     switch (val) {
@@ -45,10 +51,12 @@ class App extends Component {
         return;
     }
   }
+  // get more data from server
   paginate(val) {
     const { crypto, head } = this.state;
-    console.log(crypto[0].name, head.name);
+    // if already on first page of data, don't hit server
     if (crypto[0].name === head.name && val === "previous") return;
+    // request next or previous page of data from server
     axios
       .get(`/api/paginatecoins?paginate=${val}`)
       .then(response => {
@@ -57,9 +65,22 @@ class App extends Component {
       })
       .catch(err => alert(err));
   }
+  // request filtered data from server
+  handleSearch(term) {
+    axios
+      .get(`/api/search?searchTerm=${term}`)
+      .then(response => this.setState({ crypto: response.data }))
+      .catch(err => alert(err));
+  }
+
   render() {
+    // render our content
     const { crypto, home, tracker, coins } = this.state;
-    const props = { coins: crypto, paginate: this.paginate };
+    const props = {
+      coins: crypto,
+      paginate: this.paginate,
+      search: this.handleSearch
+    };
 
     const changeView = event =>
       this.handleViewChange(event.target.innerText.toLowerCase());
