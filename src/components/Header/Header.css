@@ -12,11 +12,6 @@ header img {
   height: 50px;
 }
 
-.flex {
-  display: flex;
-  align-items: center;
-}
-
 .nav-list {
   width: 50%;
   height: 100%;

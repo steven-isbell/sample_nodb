@@ -1,0 +1,17 @@
+.coin-map-container {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.coin-card {
+  width: 250px;
+  height: 300px;
+  border: 1px solid black;
+  -webkit-box-shadow: 4px 4px 5px 0px rgba(133, 121, 133, 1);
+  -moz-box-shadow: 4px 4px 5px 0px rgba(133, 121, 133, 1);
+  box-shadow: 4px 4px 5px 0px rgba(133, 121, 133, 1);
+  margin: 10px;
+  padding: 10px;
+  justify-content: center;
+  flex-direction: column;
+}

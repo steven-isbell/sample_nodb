@@ -11,25 +11,28 @@ export default class CoinContainer extends Component {
   render() {
     const { coins, paginate, search } = this.props;
     return (
-      <div>
+      <div className="flex coin-container">
         <input
           type="text"
           placeholder="Search Available Currencies"
           onChange={event => search(event.target.value)}
         />
         <CoinMap coins={coins} />
-        <button
-          onClick={event => paginate(event.target.innerHTML.toLowerCase())}
-        >
-          Previous
-        </button>
-        <button
-          onClick={event => {
-            paginate(event.target.innerHTML.toLowerCase());
-          }}
-        >
-          Next
-        </button>
+        <div>
+          <button
+            className="margined-right"
+            onClick={event => paginate(event.target.innerHTML.toLowerCase())}
+          >
+            Previous
+          </button>
+          <button
+            onClick={event => {
+              paginate(event.target.innerHTML.toLowerCase());
+            }}
+          >
+            Next
+          </button>
+        </div>
       </div>
     );
   }

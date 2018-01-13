@@ -13,8 +13,10 @@ if (data.length === 0) {
     .get(`${baseUrl}/coins`)
     .then(response => {
       data = [...Object.values(response.data.coins)];
+      console.log(data[0]);
     })
-    .catch(console.log);
+    // send error to the client
+    .catch(err => res.status(500).json(err));
 }
 
 // Send the data to the user
@@ -30,9 +32,9 @@ const getData = (req, res, next) => {
           selected = response.data;
           res.json(selected);
         })
-        .catch(console.log);
+        .catch(err => res.status(500).json(err));
     } else res.json(selected);
-  } else res.json(data.slice(0, 50));
+  } else res.json(data.slice(0, 25));
 };
 
 // Determine which data points to show
@@ -40,11 +42,11 @@ const paginateCoins = (req, res, next) => {
   // destructure from req.query
   const { paginate } = req.query;
   if (paginate === "next") {
-    currItem += 50;
-    res.json(data.slice(currItem, currItem + 50));
+    currItem += 25;
+    res.json(data.slice(currItem, currItem + 25));
   } else {
-    currItem -= 50;
-    res.json(data.slice(currItem, currItem + 50));
+    currItem -= 25;
+    res.json(data.slice(currItem, currItem + 25));
   }
 };
 
