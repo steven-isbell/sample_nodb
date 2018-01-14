@@ -14,7 +14,7 @@ export default class CoinContainer extends Component {
       <div className="flex coin-container">
         <input
           type="text"
-          placeholder="Search Available Currencies"
+          placeholder="Search Currencies"
           onChange={event => search(event.target.value)}
         />
         <CoinMap coins={coins} />

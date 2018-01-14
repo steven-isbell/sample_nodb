@@ -12,11 +12,40 @@ if (data.length === 0) {
   axios
     .get(`${baseUrl}/coins`)
     .then(response => {
-      data = [...Object.values(response.data.coins)];
+      // Alter the incoming data as needed
+      const suffixes = [
+        "",
+        "st",
+        "nd",
+        "rd",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th",
+        "th"
+      ];
+      data = [...Object.values(response.data.coins)].map(val => {
+        const lastInt = Number(
+          val.rank
+            .toString()
+            .split("")
+            .pop()
+        );
+        return Object.assign({}, val, {
+          rank: val.rank + suffixes[lastInt],
+          usd: val.usd.toFixed(
+            Math.max(2, (val.usd.toString().split(".")[1] || []).length)
+          )
+        });
+      });
       console.log(data[0]);
     })
-    // send error to the client
-    .catch(err => res.status(500).json(err));
+    // log the error
+    .catch(console.log);
 }
 
 // Send the data to the user
@@ -25,7 +54,7 @@ if (data.length === 0) {
 const getData = (req, res, next) => {
   const { coin = null } = req.query;
   if (coin) {
-    if (!selected) {
+    if (!selected || selected !== coin) {
       axios
         .get(`${baseUrl}/${coin}`)
         .then(response => {

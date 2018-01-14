@@ -1,7 +1,7 @@
 import React from "react";
 import "./CoinMap.css";
 
-const CoinMap = ({ coins }) =>
+const CoinMap = ({ coins, trackCoin }) =>
   coins.length > 0 ? (
     <div className="flex coin-map-container">
       {coins.map((coin, idx) => (
@@ -10,7 +10,8 @@ const CoinMap = ({ coins }) =>
           <p>{coin.btc} BTC</p>
           <p>{coin.rank}</p>
           <p>{coin.ticker}</p>
-          <p>{coin.usd}</p>
+          <p>$ {coin.usd}</p>
+          <button onClick={() => trackCoin(coin.ticker)}>Track Coin</button>
         </div>
       ))}
     </div>
