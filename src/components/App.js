@@ -70,6 +70,8 @@ class App extends Component {
     this.setState({ edit: true });
   }
   updateTitle(event) {
+    // this was to have a put request
+    // this would be better to do on the client with state instead of hitting the server over and over.
     axios
       .put(`/api/put?title=${event.target.value}`)
       .then(response => this.setState({ title: response.data }))
