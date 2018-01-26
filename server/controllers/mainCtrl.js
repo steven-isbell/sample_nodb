@@ -7,6 +7,9 @@ let userCoins = [];
 // keeps track of the item we're paginating from
 let currItem = 0;
 
+// title of users tracker
+let userTitle = "";
+
 // Go Load our data from the api and put it in an array
 if (data.length === 0) {
   axios
@@ -93,8 +96,11 @@ const postData = (req, res, next) => {
     });
 };
 
+// update users title
 const putData = (req, res, next) => {
-  res.json("3");
+  const { title } = req.query;
+  userTitle = req.query;
+  res.json(title);
 };
 
 const deleteData = (req, res, next) => {

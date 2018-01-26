@@ -70,7 +70,10 @@ class App extends Component {
     this.setState({ edit: true });
   }
   updateTitle(event) {
-    this.setState({ title: event.target.value });
+    axios
+      .put(`/api/put?title=${event.target.value}`)
+      .then(response => this.setState({ title: response.data }))
+      .catch(err => alert(err));
   }
   finishEdit() {
     this.setState({ edit: false });
