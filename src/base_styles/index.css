@@ -9,6 +9,18 @@ body {
   align-items: center;
 }
 
+.column {
+  flex-direction: column;
+}
+
 .margined-right {
   margin-right: 10px;
+}
+
+.margined-bottom {
+  margin-bottom: 10px;
+}
+
+.pointer {
+  cursor: pointer;
 }

@@ -14,12 +14,16 @@ class App extends Component {
       home: true,
       tracker: false,
       coins: false,
-      head: ""
+      head: "",
+      edit: false,
+      title: ""
     };
 
     this.handleViewChange = this.handleViewChange.bind(this);
     this.paginate = this.paginate.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
+    this.editTitle = this.editTitle.bind(this);
+    this.updateTitle = this.updateTitle.bind(this);
+    this.finishEdit = this.finishEdit.bind(this);
   }
 
   componentDidMount() {
@@ -33,9 +37,9 @@ class App extends Component {
       )
       .catch(err => alert(err));
   }
-  // mimicking routing
-  // show and hide components based on boolean
   handleViewChange(val) {
+    // mimicking routing
+    // show and hide components based on boolean
     if (this.state[val]) return;
     switch (val) {
       case "home":
@@ -51,35 +55,42 @@ class App extends Component {
         return;
     }
   }
-  // get more data from server
   paginate(val) {
+    // get more data from server
     const { crypto, head } = this.state;
     // if already on first page of data, don't hit server
     if (crypto[0].name === head.name && val === "previous") return;
     // request next or previous page of data from server
     axios
       .get(`/api/paginatecoins?paginate=${val}`)
-      .then(response => {
-        console.log(response);
-        this.setState({ crypto: response.data });
-      })
-      .catch(err => alert(err));
-  }
-  // request filtered data from server
-  handleSearch(term) {
-    axios
-      .get(`/api/search?searchTerm=${term}`)
       .then(response => this.setState({ crypto: response.data }))
       .catch(err => alert(err));
   }
-
+  editTitle() {
+    this.setState({ edit: true });
+  }
+  updateTitle(event) {
+    this.setState({ title: event.target.value });
+  }
+  finishEdit() {
+    this.setState({ edit: false });
+  }
   render() {
     // render our content
-    const { crypto, home, tracker, coins } = this.state;
-    const props = {
+    const { crypto, home, tracker, coins, edit, title } = this.state;
+    // make a 'props' object that has all the values we want to pass down
+    const ccProps = {
       coins: crypto,
       paginate: this.paginate,
       search: this.handleSearch
+    };
+
+    const trackProps = {
+      edit,
+      title,
+      editTitle: this.editTitle,
+      updateTitle: this.updateTitle,
+      finishEdit: this.finishEdit
     };
 
     const changeView = event =>
@@ -88,9 +99,11 @@ class App extends Component {
     return (
       <div className="App">
         <Header viewChange={changeView} />
+        {/* use booleans to show or hide elements */}
         {home && <LandingPage />}
-        {tracker && <Tracker />}
-        {coins && <CoinContainer {...props} />}
+        {tracker && <Tracker {...trackProps} />}
+        {/* User object spread to pass props to Coin Container */}
+        {coins && <CoinContainer {...ccProps} />}
       </div>
     );
   }

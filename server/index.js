@@ -9,6 +9,9 @@ const port = 3001;
 // app (server) declaration
 const app = express();
 
+//middleware
+app.use(json());
+
 // controller functions
 const {
   getData,
@@ -21,14 +24,14 @@ const {
 
 // get initial data
 app.get("/api/get", getData);
+// get tracked coins
+app.get("/api/tracked", getData);
 // get different data
 app.get("/api/paginatecoins", paginateCoins);
-// get different data
-app.get("/api/search", searchCoins);
 // add data
 app.post("/api/post", postData);
 // update data point
-app.put("/api/put/:id", putData);
+app.put("/api/put", putData);
 // delete data point
 app.delete("/api/delete/:id", deleteData);
 

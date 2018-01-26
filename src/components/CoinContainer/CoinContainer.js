@@ -7,17 +7,39 @@ import "./CoinContainer.css";
 export default class CoinContainer extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      term: ""
+    };
+    this.search = this.search.bind(this);
+    this.trackCoin = this.trackCoin.bind(this);
+  }
+  search(term) {
+    return term ? this.setState({ term }) : this.setState({ term: "" });
+  }
+  trackCoin(coin) {
+    axios
+      .post("/api/post", coin)
+      .then(response => alert(response.data.message))
+      .catch(err => alert(err.message));
   }
   render() {
-    const { coins, paginate, search } = this.props;
+    const { coins, paginate } = this.props;
+    const { term } = this.state;
+    const props = {
+      coins,
+      term,
+      coinFunc: this.trackCoin,
+      action: "Track Coin",
+      defaultVal: "No Matching Coins"
+    };
     return (
       <div className="flex coin-container">
         <input
           type="text"
           placeholder="Search Currencies"
-          onChange={event => search(event.target.value)}
+          onChange={event => this.search(event.target.value)}
         />
-        <CoinMap coins={coins} />
+        <CoinMap {...props} />
         <div>
           <button
             className="margined-right"

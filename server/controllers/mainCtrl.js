@@ -2,8 +2,8 @@ const axios = require("axios");
 const baseUrl = "https://coinbin.org";
 // Where we'll store our response from the API
 let data = [];
-// Which item the user wants more detail on
-let selected = null;
+// The coins the user wants to track
+let userCoins = [];
 // keeps track of the item we're paginating from
 let currItem = 0;
 
@@ -14,7 +14,7 @@ if (data.length === 0) {
     .then(response => {
       // Alter the incoming data as needed
       const suffixes = [
-        "",
+        "th",
         "st",
         "nd",
         "rd",
@@ -42,7 +42,6 @@ if (data.length === 0) {
           )
         });
       });
-      console.log(data[0]);
     })
     // log the error
     .catch(console.log);
@@ -52,18 +51,9 @@ if (data.length === 0) {
 // OR if trying to view specific item, request that item and send that.
 // This is reusable
 const getData = (req, res, next) => {
-  const { coin = null } = req.query;
-  if (coin) {
-    if (!selected || selected !== coin) {
-      axios
-        .get(`${baseUrl}/${coin}`)
-        .then(response => {
-          selected = response.data;
-          res.json(selected);
-        })
-        .catch(err => res.status(500).json(err));
-    } else res.json(selected);
-  } else res.json(data.slice(0, 25));
+  const { tracked } = req.query;
+  if (tracked) res.json(userCoins);
+  else res.json(data.slice(0, 25));
 };
 
 // Determine which data points to show
@@ -79,19 +69,28 @@ const paginateCoins = (req, res, next) => {
   }
 };
 
-// Search through and send the searched for data
-const searchCoins = (req, res, next) => {
-  const { searchTerm } = req.query;
-  console.log(searchTerm);
-  if (!searchTerm) res.json(data);
-  else {
-    const filtered = data.filter(coin => coin.name.includes(searchTerm));
-    res.json(filtered);
-  }
-};
-
+// Add coins to user tracker
 const postData = (req, res, next) => {
-  res.json("2");
+  // add object to array, limit to 25, make sure it's not already in array
+  if (
+    userCoins.length <= 25 &&
+    !userCoins.filter(coin => coin.name === req.body.name)[0]
+  ) {
+    userCoins.push(req.body);
+  } else {
+    return res.json({ message: `You're Already Tracking ${req.body.name}.` });
+  }
+  // check if the coin was added succesffully and send a message back
+  if (userCoins[userCoins.length - 1].name)
+    res.json({ message: `${userCoins[userCoins.length - 1].name} Tracked!` });
+  else
+    // otherwise send an error
+    res.status(500).json({
+      message:
+        userCoins.length === 25
+          ? "You May Only Track 25 Coins At A Time"
+          : "Failed To Add Coin"
+    });
 };
 
 const putData = (req, res, next) => {
@@ -99,7 +98,9 @@ const putData = (req, res, next) => {
 };
 
 const deleteData = (req, res, next) => {
-  res.json("4");
+  const { id } = req.params;
+  userCoins = userCoins.filter(coin => coin.name !== id);
+  res.json(userCoins);
 };
 
 module.exports = {
@@ -107,6 +108,5 @@ module.exports = {
   postData,
   putData,
   deleteData,
-  paginateCoins,
-  searchCoins
+  paginateCoins
 };
