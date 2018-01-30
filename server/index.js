@@ -11,6 +11,7 @@ const app = express();
 
 //middleware
 app.use(json());
+app.use(cors());
 
 // controller functions
 const {

@@ -31,7 +31,7 @@ if (data.length === 0) {
         "th",
         "th"
       ];
-      data = [...Object.values(response.data.coins)].map(val => {
+      data = Object.values(response.data.coins).map(val => {
         const lastInt = Number(
           val.rank
             .toString()
