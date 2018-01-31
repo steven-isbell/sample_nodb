@@ -12,10 +12,12 @@
     "react-scripts": "1.0.17"
   },
   "scripts": {
+    "now-start": "node server",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "now --public"
   },
   "proxy": "http://localhost:3001"
 }

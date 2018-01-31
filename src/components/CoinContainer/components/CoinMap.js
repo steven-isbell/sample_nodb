@@ -1,8 +1,9 @@
 import React from "react";
 import "./CoinMap.css";
 
-const CoinMap = ({ coins, coinFunc, term = "", action, defaultVal }) =>
-  coins.length > 0 ? (
+const CoinMap = ({ coins, coinFunc, term = "", action, defaultVal }) => {
+  console.log(term);
+  return coins.length > 0 ? (
     <div className="flex coin-map-container">
       {coins
         .filter(coin => coin.name.toLowerCase().includes(term))
@@ -20,5 +21,6 @@ const CoinMap = ({ coins, coinFunc, term = "", action, defaultVal }) =>
   ) : (
     defaultVal
   );
+};
 
 export default CoinMap;

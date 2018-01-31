@@ -12,6 +12,7 @@ export default class CoinContainer extends Component {
     };
     this.search = this.search.bind(this);
     this.trackCoin = this.trackCoin.bind(this);
+    this.handlePaginate = this.handlePaginate.bind(this);
   }
   search(term) {
     return term ? this.setState({ term }) : this.setState({ term: "" });
@@ -22,8 +23,15 @@ export default class CoinContainer extends Component {
       .then(response => alert(response.data.message))
       .catch(err => alert(err.message));
   }
+  handlePaginate(val) {
+    this.props.paginate(val);
+    this.setState(() => {
+      document.getElementById("search").value = "";
+      return { term: "" };
+    });
+  }
   render() {
-    const { coins, paginate } = this.props;
+    const { coins } = this.props;
     const { term } = this.state;
     const props = {
       coins,
@@ -35,6 +43,7 @@ export default class CoinContainer extends Component {
     return (
       <div className="flex coin-container">
         <input
+          id="search"
           type="text"
           placeholder="Search Currencies"
           onChange={event => this.search(event.target.value)}
@@ -43,14 +52,16 @@ export default class CoinContainer extends Component {
         <div>
           <button
             className="margined-right"
-            onClick={event => paginate(event.target.innerHTML.toLowerCase())}
+            onClick={event =>
+              this.handlePaginate(event.target.innerHTML.toLowerCase())
+            }
           >
             Previous
           </button>
           <button
-            onClick={event => {
-              paginate(event.target.innerHTML.toLowerCase());
-            }}
+            onClick={event =>
+              this.handlePaginate(event.target.innerHTML.toLowerCase())
+            }
           >
             Next
           </button>

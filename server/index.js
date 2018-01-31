@@ -12,6 +12,7 @@ const app = express();
 //middleware
 app.use(json());
 app.use(cors());
+// app.use(express.static(`${__dirname}/../build`));
 
 // controller functions
 const {
@@ -35,6 +36,10 @@ app.post("/api/post", postData);
 app.put("/api/put", putData);
 // delete data point
 app.delete("/api/delete/:id", deleteData);
+
+// app.get("*", (req, res, next) => {
+//   res.sendFile(`${__dirname}/../build/index.html`);
+// });
 
 // Open server to requests and responses
 app.listen(port, () => {
