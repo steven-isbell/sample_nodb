@@ -2,6 +2,7 @@
 const express = require("express");
 const { json } = require("body-parser");
 const cors = require("cors");
+const path = require("path");
 
 // what port should we listen on?
 const port = 3001;
@@ -40,7 +41,7 @@ app.delete("/api/delete/:id", deleteData);
 
 // Send the index.html (which is the content of our app) to the bowser on the initial request
 app.get("*", (req, res, next) => {
-  res.sendFile(`${__dirname}/../build/index.html`);
+  res.sendFile(path.join(__dirname, "../build/index.html"));
 });
 
 // Open server to requests and responses
