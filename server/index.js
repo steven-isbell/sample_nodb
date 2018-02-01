@@ -13,7 +13,7 @@ const app = express();
 //middleware
 app.use(json());
 app.use(cors());
-// Will serve our production files to the browser instead of using a dev server
+// Will serve our static (unchanging) production files to the browser instead of using a dev server
 app.use(express.static(`${__dirname}/../build`));
 
 // controller functions

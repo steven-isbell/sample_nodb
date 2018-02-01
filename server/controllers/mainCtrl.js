@@ -10,6 +10,31 @@ let currItem = 0;
 // title of users tracker
 let userTitle = "";
 
+// Some function I found on stackoverflow that converts scientific notation to a number.
+// Using to format one of the api values.
+const scientificToDecimal = num => {
+  //if the number is in scientific notation remove it
+  if (/\d+\.?\d*e[\+\-]*\d+/i.test(num)) {
+    let zero = "0";
+    let parts = String(num)
+      .toLowerCase()
+      .split("e"); //split into coeff and exponent
+    let e = parts.pop(); //store the exponential part
+    let l = Math.abs(e); //get the number of zeros
+    let sign = e / l;
+    let coeff_array = parts[0].split(".");
+
+    if (sign === -1)
+      num = zero + "." + new Array(l).join(zero) + coeff_array.join("");
+    else {
+      let dec = coeff_array[1];
+      if (dec) l = l - dec.length;
+      num = coeff_array.join("") + new Array(l + 1).join(zero);
+    }
+  }
+  return num;
+};
+
 // Go Load our data from the api and put it in an array
 if (data.length === 0) {
   axios
@@ -31,18 +56,32 @@ if (data.length === 0) {
         "th",
         "th"
       ];
+      // Object.values will grab just the values from the key value pairs.
+      // That's needed here because of the structure of the data the API is sending.
+      // Generally you wouldn't need to do this and can rely on the API's structure.
       data = Object.values(response.data.coins).map(val => {
+        // get last number of rank to apply the appropriate suffix (2nd or 3rd or 4th etc.)
         const lastInt = Number(
           val.rank
             .toString()
             .split("")
             .pop()
         );
+        // check if the usd of the coin is less that .00.
+        // if it is, round it to the nearest decimal else fix it to 2 decimal places.
+        const usdArray = val.usd.toString().split("");
+        const usd =
+          usdArray.slice(usdArray.indexOf(".")).length > 2
+            ? val.usd.toFixed(usdArray.lastIndexOf("0") + 1)
+            : val.usd.toFixed(2);
+        // Check if the btc value is in scientific notation, if it is, convert it to a standard number.
+        const btc = scientificToDecimal(val.btc);
+        // Object.assign is returning a new object with all the data from the current object being mapped over.
+        // We're then updating the rank, usd, and btc to have the new formatting.
         return Object.assign({}, val, {
           rank: val.rank + suffixes[lastInt],
-          usd: val.usd.toFixed(
-            Math.max(2, (val.usd.toString().split(".")[1] || []).length)
-          )
+          usd,
+          btc
         });
       });
     })
@@ -63,10 +102,13 @@ const getData = (req, res, next) => {
 const paginateCoins = (req, res, next) => {
   // destructure from req.query
   const { paginate } = req.query;
+  // if we're trying to access the next page of data
   if (paginate === "next") {
+    // increment our set by 25 and slice (copy) the next 25 items and send those to the client.
     currItem += 25;
     res.json(data.slice(currItem, currItem + 25));
   } else {
+    // otherwise go back 25 and send the previous 25 items to the client.
     currItem -= 25;
     res.json(data.slice(currItem, currItem + 25));
   }
@@ -83,7 +125,7 @@ const postData = (req, res, next) => {
   } else {
     return res.json({ message: `You're Already Tracking ${req.body.name}.` });
   }
-  // check if the coin was added succesffully and send a message back
+  // check if the coin was added successfully and send a message back
   if (userCoins[userCoins.length - 1].name)
     res.json({ message: `${userCoins[userCoins.length - 1].name} Tracked!` });
   else
@@ -96,13 +138,14 @@ const postData = (req, res, next) => {
     });
 };
 
-// update users title
+// update users title in Tracker Component
 const putData = (req, res, next) => {
   const { title } = req.query;
   userTitle = req.query;
   res.json(title);
 };
 
+// Stop Tracking Data
 const deleteData = (req, res, next) => {
   const { id } = req.params;
   userCoins = userCoins.filter(coin => coin.name !== id);

@@ -15,7 +15,9 @@ export default class CoinContainer extends Component {
     this.handlePaginate = this.handlePaginate.bind(this);
   }
   search(term) {
-    return term ? this.setState({ term }) : this.setState({ term: "" });
+    return term
+      ? this.setState({ term: term.toLowerCase() })
+      : this.setState({ term: "" });
   }
   trackCoin(coin) {
     axios
@@ -50,6 +52,7 @@ export default class CoinContainer extends Component {
         />
         <CoinMap {...props} />
         <div>
+          {/* event.target.innerHTML is grabbing the text of the button. It's a built in property on DOM Nodes, vanilla */}
           <button
             className="margined-right"
             onClick={event =>

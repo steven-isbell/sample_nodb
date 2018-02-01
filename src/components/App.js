@@ -60,10 +60,15 @@ class App extends Component {
     const { crypto, head } = this.state;
     // if already on first page of data, don't hit server
     if (crypto[0].name === head.name && val === "previous") return;
+    // Check the length of the array. If it's a partial array, we're out of data.
+    if (crypto.length < 25 && val === "next") return;
     // request next or previous page of data from server
     axios
       .get(`/api/paginatecoins?paginate=${val}`)
-      .then(response => this.setState({ crypto: response.data }))
+      .then(response => {
+        if (response.data.length > 0) this.setState({ crypto: response.data });
+        else alert("No more coins!");
+      })
       .catch(err => alert(err));
   }
   editTitle() {
@@ -107,7 +112,7 @@ class App extends Component {
         {/* use booleans to show or hide elements */}
         {home && <LandingPage />}
         {tracker && <Tracker {...trackProps} />}
-        {/* User object spread to pass props to Coin Container */}
+        {/* Use object rest spread to pass props to Coin Container */}
         {coins && <CoinContainer {...ccProps} />}
       </div>
     );
