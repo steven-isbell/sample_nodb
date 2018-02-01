@@ -5,7 +5,7 @@ const LandingPage = () => (
   <div className="landing-container">
     <div className="title">
       <h1>Welcome To Coin Tracker</h1>
-      <h2>
+      <h2 className="title-landing">
         {" "}
         Your one stop shop for crypto tracking, with a beautifully designed
         landing page and some ok functionality
