@@ -1,0 +1,64 @@
+.landing-container {
+  width: 100%;
+  height: 91vh;
+  background-image: url("https://ak1.picdn.net/shutterstock/videos/8414821/thumb/1.jpg");
+  background-repeat: none;
+  background-size: cover;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+h1 {
+  color: white;
+  font-size: 3em;
+}
+
+h2 {
+  color: white;
+  font-size: 2em;
+  text-align: center;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.9);
+  transition: all ease-in;
+  animation: woah 7s;
+}
+
+@-webkit-keyframes woah {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@-moz-keyframes woah {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@-o-keyframes woah {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes woah {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
