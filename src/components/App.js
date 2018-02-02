@@ -1,3 +1,10 @@
+// Make sure to add your proxy in your package.json to
+// to forward all your requests from your dev server to your node server
+
+// you can also delete the logo.svg because we're not using it.
+// it's good practice to remove extraneous files and
+// packages if you're not using them to help save on space and memory.
+
 import React, { Component } from "react";
 import axios from "axios";
 import Header from "./Header/Header";
@@ -5,6 +12,8 @@ import CoinContainer from "./CoinContainer/CoinContainer";
 import LandingPage from "./LandingPage/LandingPage";
 import Tracker from "./Tracker/Tracker";
 
+// Here the app is the brains of our application.
+// We're passing most of the data and methods as props to the components that need them.
 class App extends Component {
   constructor(props) {
     super(props);
@@ -23,13 +32,13 @@ class App extends Component {
     this.paginate = this.paginate.bind(this);
     this.editTitle = this.editTitle.bind(this);
     this.updateTitle = this.updateTitle.bind(this);
-    this.finishEdit = this.finishEdit.bind(this);
   }
 
   componentDidMount() {
     // request our initial data
     // set data to state
-    // head is tracking the first item in the response
+    // head is tracking the first item in the response...
+    // so we know that there's nothing past it when we try to page backward
     axios
       .get("/api/get")
       .then(response =>
@@ -39,8 +48,10 @@ class App extends Component {
   }
   handleViewChange(val) {
     // mimicking routing
-    // show and hide components based on boolean
+    // called conditional rendering.
+    // if we're already on the 'route' then do nothing, just return
     if (this.state[val]) return;
+    // show and hide components based on boolean
     switch (val) {
       case "home":
         this.setState({ home: true, tracker: false, coins: false });
@@ -72,7 +83,10 @@ class App extends Component {
       .catch(err => alert(err));
   }
   editTitle() {
-    this.setState({ edit: true });
+    // flip the boolean of edit to either true or false.
+    // this is useful when needing to click buttons or just flop booleans.
+    // It says change it to the opposite of what's on state currently.
+    this.setState({ edit: !this.state.edit });
   }
   updateTitle(event) {
     // this was to have a put request
@@ -82,11 +96,9 @@ class App extends Component {
       .then(response => this.setState({ title: response.data }))
       .catch(err => alert(err));
   }
-  finishEdit() {
-    this.setState({ edit: false });
-  }
   render() {
     // render our content
+    // Destructure our values off state.
     const { crypto, home, tracker, coins, edit, title } = this.state;
     // make a 'props' object that has all the values we want to pass down
     const ccProps = {
@@ -94,13 +106,11 @@ class App extends Component {
       paginate: this.paginate,
       search: this.handleSearch
     };
-
     const trackProps = {
       edit,
       title,
       editTitle: this.editTitle,
-      updateTitle: this.updateTitle,
-      finishEdit: this.finishEdit
+      updateTitle: this.updateTitle
     };
 
     const changeView = event =>
@@ -108,11 +118,16 @@ class App extends Component {
 
     return (
       <div className="App">
+        {/* Header will show all the time */}
         <Header viewChange={changeView} />
         {/* use booleans to show or hide elements */}
         {home && <LandingPage />}
+        {/* If you haven't already, check out Object Rest Spread to
+            understand what's happing with the ..props. on the CoinMap Component
+            https://github.com/tc39/proposal-object-rest-spread
+        */}
         {tracker && <Tracker {...trackProps} />}
-        {/* Use object rest spread to pass props to Coin Container */}
+        {/* Use object rest spread (similar to array spread) to pass props to Coin Container */}
         {coins && <CoinContainer {...ccProps} />}
       </div>
     );

@@ -9,12 +9,12 @@
   justify-items: center;
 }
 
-h1 {
+.title-landing {
   color: white;
   font-size: 3em;
 }
 
-.title-landing {
+.subtitle-landing {
   color: white;
   font-size: 2em;
   text-align: center;

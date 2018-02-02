@@ -8,8 +8,8 @@ import "./CoinMap.css";
 // Once we've filtered we're chaining a .map to map over the remaining elements in the filtered array and render them to the DOM.
 // If coins has no content, we're rendering the string stating that there's nothing there.
 // That defaultVal is coming from either CoinContainer or Tracker.
-// By using props, we're able to reuse this component to render both our coins view and our tracker view.
-// You could move the search to the server so you can search all coins and not just those on the screen.
+// By using props, we're able to reuse this component to render in both our coins view and our tracker view.
+// You could move the search to the server so you can search all coins and not just those on the screen if you wanted to improve the UX.
 const CoinMap = ({
   coins = [],
   coinFunc = null,

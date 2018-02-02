@@ -91,7 +91,9 @@ if (data.length === 0) {
 
 // Send the data to the user
 // OR if trying to view specific item, request that item and send that.
-// This is reusable
+// This is reusable becasue we're sending back a query with the request
+// IF tracked is on req.query, then we're asking for the tracked coins array
+// otherwise we're asking for the general data array of coins.
 const getData = (req, res, next) => {
   const { tracked } = req.query;
   if (tracked) res.json(userCoins);
@@ -101,6 +103,7 @@ const getData = (req, res, next) => {
 // Determine which data points to show
 const paginateCoins = (req, res, next) => {
   // destructure from req.query
+  // We sent back a query on our request that looks like '/api/paginate?paginate=previous'
   const { paginate } = req.query;
   // if we're trying to access the next page of data
   if (paginate === "next") {
@@ -139,6 +142,7 @@ const postData = (req, res, next) => {
 };
 
 // update users title in Tracker Component
+// pulling title from query
 const putData = (req, res, next) => {
   const { title } = req.query;
   userTitle = req.query;
@@ -147,6 +151,7 @@ const putData = (req, res, next) => {
 
 // Stop Tracking Data
 const deleteData = (req, res, next) => {
+  // our coin name will sit on id because that's our place holder for a path parameter.
   const { id } = req.params;
   userCoins = userCoins.filter(coin => coin.name !== id);
   res.json(userCoins);
