@@ -9,12 +9,12 @@
   justify-items: center;
 }
 
-h1 {
+.title > h1 {
   color: white;
   font-size: 3em;
 }
 
-h2 {
+.title > h2 {
   color: white;
   font-size: 2em;
   text-align: center;
