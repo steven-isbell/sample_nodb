@@ -57,7 +57,11 @@ export default class Tracker extends Component {
     return (
       <div className="flex column">
         {!edit ? (
-          <h1 className="pointer" title="Click To Change" onClick={editTitle}>
+          <h1
+            className="pointer tracker-title"
+            title="Click To Change"
+            onClick={editTitle}
+          >
             {title || "My Coins"}
           </h1>
         ) : (
