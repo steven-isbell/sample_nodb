@@ -1,9 +1,9 @@
-import React from "react";
-import "./Header.css";
+import React from 'react';
+import './Header.css';
 
 // navItems will be mapped over to create 3 divs that will act as links in our header
 // This is taking advantage of React to keep our code DRY (Don't Repeat Yourself)
-const navItems = ["Home", "Coins", "Tracker"];
+const navItems = ['Home', 'Coins', 'Tracker'];
 
 // Here we're destructuring the props coming from the parent.
 // Could also write this as:  const Header = (props) => (
@@ -18,7 +18,7 @@ const Header = ({ viewChange }) => (
     </div>
     <div className="nav-list flex">
       {navItems.map(item => (
-        <div className="nav-list-item" onClick={viewChange}>
+        <div key={item} className="nav-list-item" onClick={viewChange}>
           {item}
         </div>
       ))}
